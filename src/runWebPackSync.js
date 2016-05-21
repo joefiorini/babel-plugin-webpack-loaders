@@ -11,7 +11,8 @@ export default ({ path, configPath, config, verbose }) => {
 
   const webPackPath = require.resolve('webpack/bin/webpack');
   const rnd = `${(new Date()).getTime()}_${Math.round(1000000 * Math.random())}`;
-  const outPath = join(config.output.path || DEFAULT_OUTPUT_PATH, `.webpack.res.${rnd}.js`);
+  const outPath = config.output.path || DEFAULT_OUTPUT_PATH;
+  const outFilename = `.webpack.res.${rnd}.js`;
 
   // I need to run webpack via execSync because I have not found the way how to run
   // babel visitors asynchronously or run webpack compile synchronously
@@ -19,7 +20,8 @@ export default ({ path, configPath, config, verbose }) => {
     quote([
       'node', // for windows support
       webPackPath,
-      path, outPath,
+      path, '--output-path', outPath,
+      '--output-filename', outFilename,
       '--config', configPath,
       '--bail',
     ])
